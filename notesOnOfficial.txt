@@ -1,0 +1,32 @@
+So start in main window
+tis a gui
+all settings set there, so just assume have them
+
+then create an "engine" with that set up
+a little to with callbacks so can get data want out of it??
+
+then call engine."FindBestSolution"
+
+in find best
+set min values for fitness (here high fitness better)
+get list of objects
+pool candidates so not creating and destroying all the time
+initialize initial population randomly - some fancy thread stuff for efficiently
+but really done with "RAndomize" function
+figure out what it's doing later
+
+
+Now looping over generations
+calculating fitness via "FitnessFunction"
+check for best
+check for average
+fancy stuff for parallel processing and ending early if progress not made
+build next generation in various complex ways depending on chosen strategy
+
+then return best!
+
+
+
+
+Objects are "Strategy"
+in there is both the format, and the methods used to mutate and crossover
