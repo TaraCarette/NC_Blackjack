@@ -142,7 +142,7 @@ namespace BlackjackStrategy.Models
                     nextGeneration.Add(pool.CopyOf(BestSolution));
 
                 // then do the selection, crossover and mutation to populate the rest of the next generation
-                var children = SelectCrossOverAndMutate(currentEngineParams.PopulationSize - nextGeneration.Count);
+                var children = SelectCrossOverAndMutate(currentEngineParams.PopulationSize - nextGeneration.Count, averageFitness);
                 nextGeneration.AddRange(children);
 
                 // move to the next generation
@@ -194,7 +194,7 @@ namespace BlackjackStrategy.Models
             }
         }
 
-        private Strategy[] SelectCrossOverAndMutate(int numNeeded)
+        private Strategy[] SelectCrossOverAndMutate(int numNeeded, float averageFitness)
         {
             // multi-threading to fill in the remaining children for the next generation
             ConcurrentBag<Strategy> results = new ConcurrentBag<Strategy>();
@@ -224,7 +224,24 @@ namespace BlackjackStrategy.Models
 
                     // Mutation
                     if (randomizer.GetFloatFromZeroToOne() < currentEngineParams.MutationRate)
-                        child.Mutate(currentEngineParams.MutationImpact);
+                        if (currentEngineParams.MutationAdaptiveOn)
+                        {
+                            float currFitness = FitnessFunction(child);
+
+                            if (currFitness < averageFitness)
+                            {
+                                child.Mutate(currentEngineParams.MutationAdaptiveHighRate);
+                            }
+                            else
+                            {
+                                child.Mutate(currentEngineParams.MutationAdaptiveLowRate);
+                            }
+                        }
+                        else 
+                        {
+                            child.Mutate(currentEngineParams.MutationImpact);
+                        }
+
 
                     results.Add(child);
                 });

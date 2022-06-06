@@ -8,6 +8,15 @@ namespace BlackjackStrategy.Models
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public sealed class EngineParameters
     {
+        [Description("Use an adaptive mutation rate, where the lower the quality of the solution, the higher the rate of mutation.")]
+        public bool MutationAdaptiveOn { get; set; } = false;
+
+        [Description("From 0.0 to 1.0, percentage of table cells that get mutated when it is a poor solution")]
+        public double MutationAdaptiveHighRate { get; set; } = 0.0;
+
+        [Description("From 0.0 to 1.0, percentage of table cells that get mutated when it is a good solution")]
+        public double MutationAdaptiveLowRate { get; set; } = 0.0;
+
         [Description("Number of candidates per generation")]
         public int PopulationSize { get; set; } = 750;
 
